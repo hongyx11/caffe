@@ -5,7 +5,8 @@ set(Caffe_DEFINITIONS "")
 set(Caffe_COMPILE_OPTIONS "")
 
 # ---[ Boost
-find_package(Boost 1.54 REQUIRED COMPONENTS system thread filesystem)
+Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
+find_package(Boost 1.70 REQUIRED COMPONENTS system thread filesystem)
 list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${Boost_INCLUDE_DIRS})
 list(APPEND Caffe_LINKER_LIBS PUBLIC ${Boost_LIBRARIES})
 
@@ -30,14 +31,13 @@ if(USE_OPENMP)
 endif()
 
 # ---[ Google-glog
-include("cmake/External/glog.cmake")
-list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${GLOG_INCLUDE_DIRS})
-list(APPEND Caffe_LINKER_LIBS PUBLIC ${GLOG_LIBRARIES})
+list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${CONAN_GLOG_ROOT}/include)
+list(APPEND Caffe_LINKER_LIBS PUBLIC ${CONAN_GLOG_ROOT}/lib/libglog.a)
 
 # ---[ Google-gflags
-include("cmake/External/gflags.cmake")
-list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${GFLAGS_INCLUDE_DIRS})
-list(APPEND Caffe_LINKER_LIBS PUBLIC ${GFLAGS_LIBRARIES})
+#include("cmake/External/gflags.cmake")
+list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${CONAN_GLFAGS_ROOT}/include)
+list(APPEND Caffe_LINKER_LIBS PUBLIC ${CONAN_GLFAGS_ROOT}/lib/libgflags_nothreads.a)
 
 # ---[ Google-protobuf
 include(cmake/ProtoBuf.cmake)

@@ -11,6 +11,9 @@ add_definitions(-DCAFFE_VERSION=${CAFFE_TARGET_VERSION})
 # ---[ Using cmake scripts and modules
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
 include(ExternalProject)
 include(GNUInstallDirs)
 
@@ -24,6 +27,10 @@ include(cmake/ConfigGen.cmake)
 OPTION(CPU_ONLY  "Build Caffe without CUDA support" ON) # TODO: rename to USE_CUDA
 OPTION(USE_CUDNN "Build Caffe with cuDNN library support" OFF)
 OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
+OPTION(BUILD_python "Build shared libraries" OFF)
+OPTION(BUILD_matlab "Build shared libraries" OFF)
+OPTION(BUILD_docs "Build shared libraries" OFF)
+OPTION(USE_NCCL "Build shared libraries" OFF)
 OPTION(USE_OPENCV "Build with OpenCV support" OFF)
 OPTION(USE_LEVELDB "Build with levelDB" ON)
 OPTION(USE_LMDB "Build with lmdb" ON)
@@ -34,15 +41,7 @@ OPTION(USE_HDF5 "Build with hdf5" ON)
 # ---[ Dependencies
 include(cmake/Dependencies.cmake)
 
-# ---[ Flags
-if(UNIX OR APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
-endif()
-
 caffe_set_caffe_link()
-
-# ---[ Warnings
-caffe_warnings_disable(CMAKE_CXX_FLAGS -Wno-sign-compare -Wno-uninitialized)
 
 # ---[ Config generation
 configure_file(cmake/Templates/caffe_config.h.in "${PROJECT_BINARY_DIR}/caffe_config.h")
