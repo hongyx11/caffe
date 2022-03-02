@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.20.0)
 # ---[ Caffe project
 project(Caffe C CXX)
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
+
 # ---[ Caffe version
 set(CAFFE_TARGET_VERSION "1.0.0" CACHE STRING "Caffe logical version")
 set(CAFFE_TARGET_SOVERSION "1.0.0" CACHE STRING "Caffe soname version")
@@ -24,24 +27,27 @@ include(cmake/Summary.cmake)
 include(cmake/ConfigGen.cmake)
 
 # ---[ Options
-OPTION(CPU_ONLY  "Build Caffe without CUDA support" ON) # TODO: rename to USE_CUDA
-OPTION(USE_CUDNN "Build Caffe with cuDNN library support" OFF)
-OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
-OPTION(BUILD_python "Build shared libraries" OFF)
-OPTION(BUILD_matlab "Build shared libraries" OFF)
-OPTION(BUILD_docs "Build shared libraries" OFF)
-OPTION(USE_NCCL "Build shared libraries" OFF)
-OPTION(USE_OPENCV "Build with OpenCV support" OFF)
-OPTION(USE_LEVELDB "Build with levelDB" ON)
-OPTION(USE_LMDB "Build with lmdb" ON)
-OPTION(ALLOW_LMDB_NOLOCK "Allow MDB_NOLOCK when reading LMDB files (only if necessary)" OFF)
-OPTION(USE_OPENMP "Link with OpenMP (when your BLAS wants OpenMP and you get linker errors)" OFF)
-OPTION(USE_HDF5 "Build with hdf5" ON)
+caffe_option(CPU_ONLY  "Build Caffe without CUDA support" ON) # TODO: rename to USE_CUDA
+caffe_option(USE_CUDNN "Build Caffe with cuDNN library support" OFF)
+caffe_option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+caffe_option(BUILD_python "Build shared libraries" OFF)
+caffe_option(BUILD_matlab "Build shared libraries" OFF)
+caffe_option(BUILD_docs "Build shared libraries" OFF)
+caffe_option(USE_NCCL "Build shared libraries" OFF)
+caffe_option(USE_OPENCV "Build with OpenCV support" OFF)
+caffe_option(USE_LEVELDB "Build with levelDB" ON)
+caffe_option(USE_LMDB "Build with lmdb" ON)
+caffe_option(ALLOW_LMDB_NOLOCK "Allow MDB_NOLOCK when reading LMDB files (only if necessary)" OFF)
+caffe_option(USE_OPENMP "Link with OpenMP (when your BLAS wants OpenMP and you get linker errors)" OFF)
+caffe_option(USE_HDF5 "Build with hdf5" ON)
+
+if (CPU_ONLY)
+  add_compile_definitions(CPU_ONLY)
+endif ()
 
 # ---[ Dependencies
 include(cmake/Dependencies.cmake)
 
-caffe_set_caffe_link()
 
 # ---[ Config generation
 configure_file(cmake/Templates/caffe_config.h.in "${PROJECT_BINARY_DIR}/caffe_config.h")
@@ -69,7 +75,7 @@ endif()
 add_subdirectory(src/gtest)
 add_subdirectory(src/caffe)
 add_subdirectory(tools)
-add_subdirectory(examples)
+#add_subdirectory(examples)
 #add_subdirectory(python)
 
 
@@ -78,7 +84,8 @@ add_custom_target(lint COMMAND ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/cmake/l
 
 # ---[ pytest target
 if(BUILD_python)
-  add_custom_target(pytest COMMAND python${python_version} -m unittest discover -s caffe/test WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/python )
+  add_custom_target(pytest COMMAND python${python_version} -m unittest discover -s caffe/test WORKING_DIRECTORY
+          ${PROJECT_SOURCE_DIR}/python )
   add_dependencies(pytest pycaffe)
 endif()
 

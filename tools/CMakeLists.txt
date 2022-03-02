@@ -1,6 +1,8 @@
 # Collect source files
 file(GLOB_RECURSE srcs ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
+set(srcs ${CMAKE_CURRENT_SOURCE_DIR}/extract_features.cpp)
+
 # Build each source file independently
 foreach(source ${srcs})
   get_filename_component(name ${source} NAME_WE)
@@ -12,7 +14,8 @@ foreach(source ${srcs})
 
   # target
   add_executable(${name} ${source})
-  target_link_libraries(${name} caffe ${Caffe_LINK})
+  target_link_libraries(${name} PUBLIC caffe ${Caffe_LINK} ${Caffe_LINKER_LIBS})
+  set_property(TARGET ${name} PROPERTY CXX_STANDARD 11)
   caffe_default_properties(${name})
 
   # set back RUNTIME_OUTPUT_DIRECTORY

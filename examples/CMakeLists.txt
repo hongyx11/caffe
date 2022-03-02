@@ -1,5 +1,6 @@
 file(GLOB_RECURSE examples_srcs "${PROJECT_SOURCE_DIR}/examples/*.cpp")
 
+
 foreach(source_file ${examples_srcs})
   # get file name
   get_filename_component(name ${source_file} NAME_WE)

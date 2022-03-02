@@ -36,16 +36,16 @@ list(APPEND Caffe_LINKER_LIBS PUBLIC ${CONAN_GLOG_ROOT}/lib/libglog.a)
 
 # ---[ Google-gflags
 #include("cmake/External/gflags.cmake")
-list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${CONAN_GLFAGS_ROOT}/include)
-list(APPEND Caffe_LINKER_LIBS PUBLIC ${CONAN_GLFAGS_ROOT}/lib/libgflags_nothreads.a)
+list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${CONAN_GFLAGS_ROOT}/include)
+list(APPEND Caffe_LINKER_LIBS PUBLIC ${CONAN_GFLAGS_ROOT}/lib/libgflags_nothreads.a)
 
 # ---[ Google-protobuf
 include(cmake/ProtoBuf.cmake)
 
 # ---[ HDF5
-find_package(HDF5 COMPONENTS HL REQUIRED)
-list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${HDF5_INCLUDE_DIRS})
-list(APPEND Caffe_LINKER_LIBS PUBLIC ${HDF5_LIBRARIES} ${HDF5_HL_LIBRARIES})
+#find_package(HDF5 COMPONENTS HL REQUIRED)
+#list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${HDF5_INCLUDE_DIRS})
+#list(APPEND Caffe_LINKER_LIBS PUBLIC ${HDF5_LIBRARIES} ${HDF5_HL_LIBRARIES})
 
 # This code is taken from https://github.com/sh1r0/caffe-android-lib
 if(USE_HDF5)
